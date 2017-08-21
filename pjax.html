@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+	<head>
+		<title>pjax</title>
+		<script src="jquery.min.js"></script>
+		<style>
+			.content{width:1000px;height:500px;border:solid 1px silver;text-align: center;}
+			.cont{width:700px;margin:20px auto;border:solid 1px gray;height: 300px;}
+			.nav{width:150px;float:left;text-align: center;border-right:solid 1px gray;height:100%;}
+			.nav ul{padding:0;margin:0;}
+			.nav ul li{cursor:pointer;list-style: none;height:40px;line-height: 40px;border-bottom:solid 1px gray;}
+			a{text-decoration: none;color:green;}
+		</style>
+	</head>
+	<body>
+		<div class="content">
+			<h1>pjax demo</h1>
+			<div class="cont">
+				<div class="nav">
+					<ul>
+						<li><a href="javascript:;" data-url="demo1">demo1</a></li>
+						<li><a href="javascript:;" data-url="demo2">demo2</a></li>
+						<li><a href="javascript:;" data-url="demo3">demo3</a></li>
+						<li><a href="javascript:;" data-url="demo4">demo4</a></li>
+					</ul>
+				</div>
+				<div class="nav_cont">
+					
+				</div>
+			</div>
+			
+		</div>
+
+
+		<script>
+
+			$(document).ready(function(){
+
+				var param = window.location.href.split("?")[1];
+
+				if(!param){
+					
+					//查询第一个链接
+					var url = $(".nav a:first-child").data("url");
+					var query = "url="+url;
+
+					//模拟ajax
+
+					$(".nav_cont").html(url);
+					history.pushState({url:url},url,"?"+query);//url地址保存相对地址
+
+				}else{
+					
+					
+
+					//模拟ajax
+
+					var url = param.split("=")[1];
+					$(".nav_cont").html(url);
+				}
+				
+
+			});
+
+
+			$(".nav a").click(function(){
+				var that = this;
+				var url = $(that).data("url");
+				var query = "url="+url;
+
+				if(history.pushState && query){
+					//模拟ajax
+
+					$(".nav_cont").html(url);
+
+					history.pushState({url:url},url,window.location.href.split("?")[0]+"?"+query);//url保存的是绝对地址，与之前的地址同源
+				}
+				
+			});
+			
+		</script>
+
+	</body>
+</html>
